@@ -18,7 +18,7 @@ One of the prefetch requests will look like `/prefetch-default?_rsc=[some-hash]`
 
 #### Prefetch = true
 
-The second prefetch request will be something like `/prefetch-default?_rsc=[another-hash]`. The load time here will be significantly longer, around 2s. In this case, I've applied an artificial delay (in the page component) to simulate network latency. In practice, the page component will generally be much larger than the loading component, so a similar difference in load time can be observed.
+The second prefetch request will be something like `/prefetch-default?_rsc=[another-hash]`. The load time here will be significantly longer, around 2s. In this case, I've applied an artificial delay (in the `getPosts` function called in the page component) to simulate network latency. In practice, the page component will generally be much larger than the loading component, so a similar difference in load time can be observed.
 
 ### Slow loading behavior
 
