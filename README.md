@@ -1,36 +1,29 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Loading.js demos
 
-## Getting Started
+This project illustrates some of the different behaviors of the `loading.js` file in a Next.js project, especially with respect to Link prefetching. For more info on what the `loading.js` file does, see [the docs](https://nextjs.org/docs/app/api-reference/file-conventions/loading).
 
-First, run the development server:
+## Instructions
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+To reproduce the behaviors illustrated here, install dependencies, run a build with `npm run build` and then start the production server with `npm start`.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Viewing the homepage
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Once the app is running, go to `localhost:3000` and open the network tab in the browser devtools. Hard reload the page if no requests are visible when you open the dev tools.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+Here you'll see the results of two out of three prefetch types.
 
-## Learn More
+#### Default behavior (null)
 
-To learn more about Next.js, take a look at the following resources:
+One of the prefetch requests will look like `/prefetch-default?_rsc=[some-hash]`. Note the load time here - it should be about 10-15ms because it's only preloading up to that page's route segment (meaning its `layout.tsx` and `loading.tsx` but not its `page.tsx`). This means when you click the "Default" link, the loading page will be immediately available, and will be displayed while the page content is fetched in the background.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+#### Prefetch = true
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+The second prefetch request will be something like `/prefetch-default?_rsc=[another-hash]`. The load time here will be significantly longer, around 2s. In this case, I've applied an artificial delay (in the page component) to simulate network latency. In practice, the page component will generally be much larger than the loading component, so a similar difference in load time can be observed.
 
-## Deploy on Vercel
+### Slow loading behavior
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The third prefetch type is `prefetch={false}` which can be seen on the homepage as well (or rather, not seen, because no request is made). This is generally where edge cases happen, and where it becomes non-obvious what's happening.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+When you click the "default" and "true" links, you'll notice that the page navigation happens immediately (to the spinner and to the page content, respectively). However, this is not the case for the "false" link. I've applied a delay to the loading of the spinner in `loading.tsx` to illustrate this: when not prefetching, the initial navigation must also request the `loading.tsx` file in addition to the page content.
+
+In this specific case, note that the spinner never actually shows up. This is because both the spinner and the page load are inflated to 2s. By the time the spinner is loaded and ready to display in `loading.tsx` the rest of the page has already been generated and is shown to the user. As a result, the presence of a `loading.tsx` file actually increased the bandwidth usage (and potentially the total request time). Much of the time these differences will be negligible, but in the case of very complex `loading.tsx` pages or very simple `page.tsx` files, it's actually better *not to include* a loading file.
