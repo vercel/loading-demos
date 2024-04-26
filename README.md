@@ -4,7 +4,7 @@ This project illustrates some of the different behaviors of the `loading.js` fil
 
 ## Instructions
 
-To reproduce the behaviors illustrated here, install dependencies, run a build with `npm run build` and then start the production server with `npm start`.
+To reproduce the behaviors illustrated here, install dependencies, run a build with `npm run build` and then start the production server with `npm start`. Or you can view a live demo [here](https://loading-demos.vercel.app).
 
 ### Viewing the homepage
 
