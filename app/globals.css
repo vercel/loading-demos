@@ -1,10 +1,57 @@
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --bg: #080808;
+  --surface: #0f0f0f;
+  --surface-hover: #161616;
+  --border: #1c1c1c;
+  --border-subtle: #141414;
+  --text: #f0f0f0;
+  --text-secondary: #aaaaaa; /* 8.3:1 on surface — AAA */
+  --text-muted: #a0a0a0;    /* 7.4:1 on surface — AAA */
+  --amber: #f59e0b;
+  --amber-dim: rgba(245, 158, 11, 0.12);
+  --indigo: #9299fb;         /* 7.5:1 on surface — AAA (was #6366f1 at 4.3:1) */
+  --indigo-dim: rgba(146, 153, 251, 0.12);
+  --green: #22c55e;
+  --green-dim: rgba(34, 197, 94, 0.12);
+  --cyan: #06b6d4;
+  --cyan-dim: rgba(6, 182, 212, 0.12);
+}
+
+.section-divider {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  color: var(--text-muted);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-family: 'JetBrains Mono', monospace;
+}
+.section-divider::before,
+.section-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
 @layer base {
+  html {
+    background-color: var(--bg);
+  }
   body {
-    background-color: #222;
-    color: #eee;
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: 'Bricolage Grotesque', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  code, .mono {
+    font-family: 'JetBrains Mono', monospace;
   }
 }
