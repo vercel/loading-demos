@@ -190,34 +190,36 @@ const section3 = [
       },
     ],
     outcome:
-      "Static routes are always fully prefetched — layout, loading.tsx, and page data. The loading state is prefetched but never shown because navigation is instant. Cache TTL: 30s.",
+      "Static routes are always fully prefetched — layout, loading.tsx, and page data. The loading state is prefetched but never shown because navigation is instant. Router Cache TTL: 5 min.",
     tag: "Always prefetched",
   },
   {
-    prop: "prefetch={null}",
-    title: "Static, No Loading",
-    label: "Longest cache",
-    color: "var(--cyan)",
-    colorDim: "var(--cyan-dim)",
-    href: "/static-no-loading",
-    prefetchProp: undefined as boolean | undefined,
+    prop: "prefetch={false}",
+    title: "Static, Disabled",
+    label: "No prefetch",
+    color: "var(--indigo)",
+    colorDim: "var(--indigo-dim)",
+    href: "/static-prefetch-false",
+    prefetchProp: false,
     phases: [
       {
         trigger: "viewport",
-        segments: [{ label: "full page", widthPct: 3, color: "var(--cyan)" }],
-        timing: "~instant",
-        empty: false,
+        segments: [],
+        timing: "—",
+        empty: true,
       },
       {
         trigger: "click",
-        segments: [{ label: "instant", widthPct: 3, color: "var(--cyan)" }],
-        timing: "instant",
+        segments: [
+          { label: "full page (edge)", widthPct: 8, color: "var(--indigo)" },
+        ],
+        timing: "~50ms",
         empty: false,
       },
     ],
     outcome:
-      "Static routes are fully prefetched regardless of loading.tsx. Without a loading boundary, the prefetch cache lasts until the app reloads — longer than the 30s TTL imposed by a loading boundary.",
-    tag: "Longest cache",
+      "prefetch={false} disables prefetching even for static routes. The page is fetched from the edge CDN on click — fast, but not instant. No loading state is shown.",
+    tag: "No prefetch",
   },
 ];
 
@@ -483,7 +485,7 @@ export default function Home() {
       <div className="mb-14">
         <SectionHeader
           title="Static routes"
-          subtitle="static render (no force-dynamic)  |  prefetch={null}  |  varies: loading.tsx"
+          subtitle="static render (no force-dynamic)  |  varies: prefetch  |  varies: loading.tsx"
         />
         <div className="border border-[var(--border)] rounded-xl overflow-hidden bg-[var(--surface)]">
           {section3.map((demo, i) => (
@@ -519,8 +521,8 @@ export default function Home() {
             },
             {
               icon: "📦",
-              title: "Static routes are always prefetched",
-              body: "Next.js fully prefetches static routes on viewport entry regardless of the prefetch prop. The loading state is cached but never shown.",
+              title: "Static routes are fully prefetched by default",
+              body: "With prefetch={null} or prefetch={true}, Next.js fully prefetches static routes on viewport entry — layout, loading.tsx, and page data. Setting prefetch={false} still disables prefetching.",
             },
             {
               icon: "📐",
