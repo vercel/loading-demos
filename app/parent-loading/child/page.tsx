@@ -5,10 +5,10 @@ import PostList from '@/components/post-list';
 // Force re-render on each request
 export const dynamic = 'force-dynamic';
 
-const DefaultPage = () => {
+const ParentLoadingChildPage = () => {
   return (
     <main
-      id="default"
+      id="parent-loading-child"
       className="w-[600px] mx-auto p-12"
     >
       <Link href="/" className="inline-flex items-center gap-1 mb-8 font-mono text-[13px] text-[var(--text-muted)] no-underline tracking-[0.02em]">
@@ -20,4 +20,4 @@ const DefaultPage = () => {
   );
 };
 
-export default DefaultPage;
+export default ParentLoadingChildPage;
